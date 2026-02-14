@@ -47,6 +47,7 @@ export const MonthlySummaryView: React.FC<MonthlySummaryViewProps> = ({ items, s
     items.forEach(item => {
       // Safety check: skip if date is missing or not a string
       if (!item.date || typeof item.date !== 'string') return;
+      if (item.type === TransactionType.TRANSFER) return; // Ignore transfers for summary stats
       
       const monthKey = item.date.substring(0, 7); // YYYY-MM
       if (!months[monthKey]) {

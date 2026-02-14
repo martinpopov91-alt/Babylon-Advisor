@@ -16,7 +16,8 @@ export enum TransactionType {
   INCOME = 'INCOME',
   EXPENSE = 'EXPENSE',
   SAVING = 'SAVING',
-  FIXED_EXPENSE = 'FIXED_EXPENSE'
+  FIXED_EXPENSE = 'FIXED_EXPENSE',
+  TRANSFER = 'TRANSFER'
 }
 
 export enum AccountType {
@@ -66,6 +67,7 @@ export interface BudgetItem {
   date: string; // ISO Date string (YYYY-MM-DD)
   recurrence?: RecurrenceConfig;
   accountId?: string;
+  toAccountId?: string;
 }
 
 export interface SavingsGoal {

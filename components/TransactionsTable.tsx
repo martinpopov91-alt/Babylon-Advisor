@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { Repeat, Filter, Trash2, Tag, CheckSquare, Square, X, Wallet, MoreHorizontal } from 'lucide-react';
+import { Repeat, Filter, Trash2, Tag, CheckSquare, Square, X, Wallet, MoreHorizontal, ArrowRight } from 'lucide-react';
 import { BudgetItem, TransactionType, Account, Category } from '../types.ts';
 import { CATEGORY_ICONS_MAP } from '../constants.ts';
 
@@ -69,6 +69,7 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({
     switch (type) {
       case TransactionType.INCOME: return 'text-emerald-600 dark:text-emerald-400';
       case TransactionType.SAVING: return 'text-indigo-600 dark:text-indigo-400';
+      case TransactionType.TRANSFER: return 'text-blue-600 dark:text-blue-400';
       default: return 'text-slate-700 dark:text-slate-300';
     }
   };
@@ -158,6 +159,7 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({
                     <option value={TransactionType.EXPENSE}>Expenses</option>
                     <option value={TransactionType.FIXED_EXPENSE}>Fixed Expenses</option>
                     <option value={TransactionType.SAVING}>Savings</option>
+                    <option value={TransactionType.TRANSFER}>Transfers</option>
                   </select>
                 </div>
 
@@ -240,6 +242,7 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({
               filteredItems.map((item) => {
                 const isSelected = selectedIds.has(item.id);
                 const accountName = getAccountName(item.accountId);
+                const toAccountName = item.toAccountId ? getAccountName(item.toAccountId) : null;
 
                 return (
                   <tr 
@@ -277,6 +280,12 @@ export const TransactionsTable: React.FC<TransactionsTableProps> = ({
                          <div className="flex items-center gap-1.5 text-xs">
                            <Wallet size={12} className="text-slate-300 dark:text-slate-600" />
                            {accountName}
+                           {toAccountName && (
+                             <>
+                               <ArrowRight size={10} className="text-slate-300 dark:text-slate-600" />
+                               {toAccountName}
+                             </>
+                           )}
                          </div>
                        )}
                     </td>

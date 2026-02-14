@@ -26,15 +26,16 @@ export const AccountsView: React.FC<AccountsViewProps> = ({
     let balance = account.initialBalance;
 
     // 2. Add/Subtract based on transactions linked to this account
-    // Note: We scan ALL items, not just filtered ones, to get true balance. 
-    // However, in this app 'items' is usually the state from App.tsx which contains all transactions.
-    // If 'items' passed here is filtered by date, the balance might be wrong. 
-    // Ideally, App.tsx should pass allItems. Assuming 'items' here refers to the master list or we accept it's a "Period Balance" if filtered.
-    // For a proper account view, typically you want ALL transactions. 
-    // Let's assume for now 'items' contains all history (since App.tsx loads all from localstorage).
-    
     items.forEach(item => {
-      if (item.accountId === account.id) {
+      if (item.type === TransactionType.TRANSFER) {
+        if (item.accountId === account.id) {
+          // Source Account - Subtract
+          balance -= item.actualAmount;
+        } else if (item.toAccountId === account.id) {
+          // Destination Account - Add
+          balance += item.actualAmount;
+        }
+      } else if (item.accountId === account.id) {
         if (item.type === TransactionType.INCOME) {
           balance += item.actualAmount;
         } else {

@@ -143,13 +143,15 @@ export const BudgetView: React.FC<BudgetViewProps> = ({ items, symbol, onSetBudg
     // 1. Gather all unique categories in the current items
     const uniqueCategories = new Set<string>();
     items.forEach(item => {
-      if (item.type !== TransactionType.INCOME) {
+      // Ignore Income and Transfers for budget tracking categories
+      if (item.type !== TransactionType.INCOME && item.type !== TransactionType.TRANSFER) {
         uniqueCategories.add(item.category);
       }
     });
 
     // Ensure all known categories are also included to prompt budgeting
     categories.forEach(cat => {
+      // Ignore categories that are ONLY income
       if (cat.types.length === 1 && cat.types[0] === TransactionType.INCOME) return;
       uniqueCategories.add(cat.name);
     });
@@ -162,7 +164,7 @@ export const BudgetView: React.FC<BudgetViewProps> = ({ items, symbol, onSetBudg
     });
 
     items.forEach(item => {
-      if (item.type === TransactionType.INCOME) return;
+      if (item.type === TransactionType.INCOME || item.type === TransactionType.TRANSFER) return;
       
       const stats = categoryStats[item.category];
       if (stats) {
